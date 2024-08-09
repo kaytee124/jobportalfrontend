@@ -15,7 +15,7 @@ const MyJobs = () => {
   useEffect(() => {
     if (user?.email) {
       setIsLoading(true);
-      fetch(`http://13.60.171.7:5000/myJobs/${user.email}`)
+      fetch(`http://13.60.171.7:8000/myJobs/${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           setJobs(data);
@@ -54,7 +54,7 @@ const MyJobs = () => {
   };
 
   const handleDelete = (id) => {
-    fetch(`http://13.60.171.7:5000/delete-job/${id}`, {
+    fetch(`http://13.60.171.7:8000/delete-job/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

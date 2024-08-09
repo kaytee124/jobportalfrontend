@@ -60,7 +60,7 @@ const Register = () => {
       return;
     }
   
-    Axios.post('http://13.60.171.7:5000/register', {
+    Axios.post('http://13.60.171.7:8000/register', {
       userType,
       Firstname,
       Lastname,

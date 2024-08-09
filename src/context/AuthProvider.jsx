@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await fetch("http://13.60.171.7:5000/login", {
+      const response = await fetch("http://13.60.171.7:8000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

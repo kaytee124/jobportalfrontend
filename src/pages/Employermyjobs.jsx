@@ -17,7 +17,7 @@ const Employermyjobs = () => {
     setError(null); // Reset error before making a new request
     const fetchJobs = async () => {
       try {
-        const response = await fetch(`http://13.60.171.7:5000/${user?.email}`);
+        const response = await fetch(`http://13.60.171.7:8000/myJobs/${user?.email}`);
         if (!response.ok) {
           throw new Error("Failed to fetch jobs");
         }
@@ -64,7 +64,7 @@ const Employermyjobs = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://13.60.171.7:5000/job/${id}`, {
+      const response = await fetch(`http://13.60.171.7:8000/job/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();

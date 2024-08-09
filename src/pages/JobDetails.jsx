@@ -9,41 +9,47 @@ const JobDetails = () => {
   const { id } = useParams(); // Get job ID from URL
   const [job, setJob] = useState(null); // Changed to object instead of array
   const { user } = useContext(AuthContext);
+  const [selectedFile, setSelectedFile] = useState(null); // State to manage the selected file
 
   useEffect(() => {
-    fetch(`http://13.60.171.7:5000/all-jobs/${id}`)
+    fetch(`http://13.60.171.7:8000/all-jobs/${id}`)
       .then((res) => res.json())
       .then((data) => setJob(data));
   }, [id]);
 
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]); // Set the selected file
+  };
+
   const handleJobApply = async () => {
-    const { value: url } = await Swal.fire({
-      input: "url",
-      inputLabel: "CV or Resume URL address",
-      inputPlaceholder: "Enter the URL"
-    });
-    if (url) {
-      fetch(`http://13.60.171.7:5000/all-jobs/${id}`, {
+    if (!selectedFile) {
+      Swal.fire("Please select a file to upload", "", "warning");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("cv", selectedFile);
+    formData.append("email", user.email);
+  
+    try {
+      const response = await fetch(`http://13.60.171.7:8000/all-jobs/${id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cvUrl: url, email: user.email }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.insertedId) {
-          Swal.fire("Application Submitted Successfully!", "", "success");
-        } else {
-          Swal.fire("Failed to Submit Application", "", "error");
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        Swal.fire("Failed to Submit Application", "", "error");
+        body: formData,
       });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        Swal.fire("Application Submitted Successfully!", "", "success");
+      } else {
+        Swal.fire(data.message || "Failed to Submit Application", "", "error");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire("Failed to Submit Application", "", "error");
     }
   };
+  
 
   if (!job) {
     return <div>Loading...</div>; // Show a loading state until job data is fetched
@@ -68,7 +74,16 @@ const JobDetails = () => {
           <button className="bg-blue px-6 py-1 text-white rounded-sm">
             {job.employmentType} {/* Employment type */}
           </button>
-          <button className="bg-indigo-700 px-6 py-1 text-white rounded-sm ms-2" onClick={handleJobApply}>
+          <input 
+            type="file" 
+            accept=".pdf" 
+            onChange={handleFileChange} 
+            className="block mt-4"
+          /> {/* File input for CV upload */}
+          <button 
+            className="bg-indigo-700 px-6 py-1 text-white rounded-sm ms-2 mt-2" 
+            onClick={handleJobApply}
+          >
             Apply Now
           </button>
         </div>

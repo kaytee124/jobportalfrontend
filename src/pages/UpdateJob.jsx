@@ -26,7 +26,7 @@ const UpdateJob = () => {
     data.skills = selectedOption;
     // console.log(data)
      // update the book object
-     fetch(`http://13.60.171.7:5000/update-job/${id}`, {
+     fetch(`http://13.60.171.7:8000/update-job/${id}`, {
       method: "PATCH",
 
       headers: {

@@ -14,7 +14,7 @@ const Applicanthome = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("http://13.60.171.7:5000/all-jobs")
+    fetch("http://13.60.171.7:8000/all-jobs")
       .then((res) => res.json())
       .then((data) => {
         setJobs(data);
